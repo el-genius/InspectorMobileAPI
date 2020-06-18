@@ -27,6 +27,10 @@
         public OriginInformation OriginInformation { get; set; }
 
         [JsonProperty("mandatory_mark_as_complete", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public bool? MandatoryMarkAsComplete { get; set; }
+        public bool? MandatoryMarkAsComplete { get; set; } = false;
+        public TemplateData()
+        {
+            ResponseSets = new Dictionary<string, ResponseSet>();
+        }
     }
 }

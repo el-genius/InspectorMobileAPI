@@ -24,9 +24,9 @@ namespace InspectorAPI
             //e.Payload is string representation of JSON we constructed in NotifyOnDataChange() function
             conn.Notification += (o, e) =>
             {
-                JToken x = ClearDatesFromPayload(e);
 
-                if (!(JToken.DeepEquals(x["old_data"], x["new_data"])))
+                var isChange = bool.Parse(JToken.Parse(e.Payload)["changed"].ToString());
+                if (isChange)
                 {
                     MainLogic.Instance.Prepare(e.Payload, conn);
                     MainLogic.Instance.Transform();
@@ -45,9 +45,12 @@ namespace InspectorAPI
             var x = JToken.Parse(e.Payload);
             x.SelectToken("old_data.created_at").Parent.Remove();
             x.SelectToken("old_data.updated_at").Parent.Remove();
+            x.SelectToken("old_data.mobile_template").Parent.Remove();
 
             x.SelectToken("new_data.created_at").Parent.Remove();
             x.SelectToken("new_data.updated_at").Parent.Remove();
+            x.SelectToken("new_data.mobile_template").Parent.Remove();
+
             return x;
         }
     }

@@ -15,7 +15,6 @@
     <Folder Include="DbManipulation\Query\" />
     <Folder Include="Models\Composite\" />
     <Folder Include="Models\MobileModel\Enums\" />
-    <Folder Include="Logic\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>

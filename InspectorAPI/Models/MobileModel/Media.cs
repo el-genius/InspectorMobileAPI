@@ -12,9 +12,9 @@
         public string FileExt { get; set; }
 
         [JsonProperty("media_id", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? MediaId { get; set; }
+        public Guid? MediaId { get; set; } = Guid.NewGuid();
 
         [JsonProperty("date_created", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public DateTimeOffset? DateCreated { get; set; }
+        public DateTimeOffset? DateCreated { get; set; } = DateTime.Now;
     }
 }

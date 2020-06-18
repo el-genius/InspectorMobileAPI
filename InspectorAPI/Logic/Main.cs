@@ -18,11 +18,13 @@ namespace InspectorAPI.Logic
             }
         }
         public string TableName { get; set; }
-        public int TemplateId { get; set; }
+        public string TemplateId { get; set; }
         public dynamic TemplateName { get; private set; }
         public dynamic Payload { get; set; }
-        public dynamic ExaminationTemplateData { get; set; }
+        public dynamic ExaminationTemplateData { get; private set; }
         public dynamic ExaminationTemplateMobileData { get; private set; }
+        public dynamic ResponsesSets { get; private set; }
+        public Templates Template { get; set; }
 
         private MainLogic()
         {
@@ -38,22 +40,22 @@ namespace InspectorAPI.Logic
             Conn = conn.CloneWith(conn.ConnectionString);
 
             this.Payload = JsonConvert.DeserializeObject(payload);
+            this.TableName = Payload.table;
             this.ExaminationTemplateData = Payload.new_data;
+            this.TemplateId = ExaminationTemplateData.id.Value.ToString();
+            this.TemplateName = ExaminationTemplateData.description.ToString();
             this.ExaminationTemplateMobileData = Payload.examination_template_mobile_items;
-            this.TemplateId = int.Parse(ExaminationTemplateData.id.Value.ToString());
-            this.TemplateName=  ExaminationTemplateData.description.ToString();
-
-            this.TableName = Payload.table;s
+            this.ResponsesSets = Payload.responses_set;
+            this.Template = new Templates(TemplateId, TemplateName, ExaminationTemplateMobileData, ResponsesSets);
         }
 
         public void Transform()
         {
-            var temp = new Templates(TemplateId.ToString(),ExaminationTemplateData.description.Value);
-            Console.WriteLine(temp.ToJson());
+            Console.WriteLine(Template.ToJson());
             using (Conn)
             {
                 Conn.Open();
-                using (var cmd = new NpgsqlCommand("update " + TableName + " set mobile_template='" + temp.ToJson() + "' where id=" + ExaminationTemplateData.id, Conn))
+                using (var cmd = new NpgsqlCommand("update " + TableName + " set mobile_template='" + Template.ToJson() + "' where id=" + ExaminationTemplateData.id, Conn))
                 {
                     cmd.ExecuteNonQuery();
                     cmd.Dispose();

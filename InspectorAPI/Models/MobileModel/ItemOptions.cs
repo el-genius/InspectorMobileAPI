@@ -12,10 +12,10 @@
         public bool? IsMandatory { get; set; }
 
         [JsonProperty("response_set", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? ResponseSet { get; set; }
+        public string ResponseSet { get; set; }
 
         [JsonProperty("failed_responses", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Guid[] FailedResponses { get; set; }
+        public int? FailedResponses { get; set; }
 
         [JsonProperty("is_custom_failed_responses", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public bool? IsCustomFailedResponses { get; set; }

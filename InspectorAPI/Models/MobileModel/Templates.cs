@@ -1,8 +1,12 @@
 ﻿namespace InspectorAPI.Models
 {
     using System;
-
+    using System.Collections.Generic;
+    using System.Dynamic;
     using System.Globalization;
+    using System.Linq;
+    using System.Xml.Linq;
+    using InspectorAPI.Logic.Helper;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -21,19 +25,19 @@
         public string Type { get; set; } = "template";
 
         [JsonProperty("items", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Item[] Items { get; set; }
+        public List<Item> Items { get; set; }
 
         [JsonProperty("header", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public Header[] Header { get; set; }
 
         [JsonProperty("deleted", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public bool? Deleted { get; set; }
+        public bool? Deleted { get; set; } = false;
 
         [JsonProperty("trashed", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public bool? Trashed { get; set; }
+        public bool? Trashed { get; set; } = false;
 
         [JsonProperty("libraryId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public string LibraryId { get; set; }
+        public string LibraryId { get; set; } = Guid.NewGuid().ToString();
 
         [JsonProperty("created_at", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public DateTimeOffset? CreatedAt { get; set; }
@@ -48,21 +52,86 @@
         public string TemplateId { get; set; }
 
         [JsonProperty("revision_key", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? RevisionKey { get; set; }
+        public Guid? RevisionKey { get; set; } = Guid.NewGuid();
 
         [JsonProperty("template_data", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public TemplateData TemplateData { get; set; }
 
         [JsonProperty("server_revision_key", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? ServerRevisionKey { get; set; }
+        public Guid? ServerRevisionKey { get; set; } = Guid.NewGuid();
 
-        public static Templates FromJson(string json) => JsonConvert.DeserializeObject<Templates>(json, Converter.Settings);
 
-        public Templates() {}
-        public Templates(string id, string name)
+        public Templates()
+        {
+            this.Items = new List<Item>();
+            TemplateData = new TemplateData();
+        }
+
+        public Templates(string id, string name, dynamic examinationMobileTemplate, dynamic answerMobileSet) : this()
         {
             this.Id = id;
             this.Name = name;
+            FromJson(examinationMobileTemplate, answerMobileSet);
+        }
+
+        //JsonConvert.DeserializeObject<Templates>(json, Converter.Settings);
+        public void FromJson(params dynamic[] json)
+        {
+            var examinations = json[0];
+            var responses = json[1];
+            SetQuestionItems(examinations);
+            SetResponseSet(responses);
+        }
+
+        private void SetResponseSet(dynamic responses)
+        {
+            ResponseSet tempSet = null;
+            foreach (var item in responses)
+            {
+                if (tempSet?.Id != null && tempSet?.Id != item.id.ToString())
+                {
+                    TemplateData.ResponseSets.Add(tempSet.Id, tempSet);
+                }
+                if (tempSet?.Id == null || tempSet?.Id != item.id.ToString())
+                {
+                    tempSet = new ResponseSet();
+                    tempSet.Id = item.id;
+                    tempSet.Type = item.type;
+                }
+
+                tempSet.Responses.Add(new Response()
+                {
+                    Colour = item.responses_color.ToString(),
+                    Id = item.responses_id.ToString(),
+                    Label = item.responses_label.ToString(),
+                    Score =item.responses_score.ToString(),
+                    EnableScore = bool.Parse(item.responses_enable_score.ToString())
+                });
+            }
+            TemplateData.ResponseSets.Add(tempSet.Id, tempSet);
+        }
+
+        private void SetQuestionItems(dynamic examinations)
+        {
+            foreach (var item in examinations)
+            {
+                var tmpItem = new Item
+                {
+                    Type = item.type.ToString(),
+                    Label = item.label.ToString(),
+                    ItemId = item.item_id.ToString(),
+                    ParentId = item.parent_id?.ToString(),
+                };
+                if (tmpItem.Type == "question")
+                {
+                    tmpItem.Options.Weighting = 1;
+                    tmpItem.Options.IsMandatory = bool.Parse(item.options_is_mandatory.ToString());
+                    tmpItem.Options.ResponseSet = item.options_response_set.ToString();
+                    tmpItem.Options.IsCustomFailedResponses = false;
+                    tmpItem.Options.FailedResponses = 2;
+                }
+                Items.Add(tmpItem);
+            }
         }
     }
 

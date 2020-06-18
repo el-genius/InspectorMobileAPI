@@ -15,13 +15,13 @@
         public string DocNo { get; set; }
 
         [JsonProperty("industry", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public long? Industry { get; set; }
+        public long? Industry { get; set; } = 9;
 
         [JsonProperty("description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
         [JsonProperty("subindustry", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public long? Subindustry { get; set; }
+        public long? Subindustry { get; set; } = -1;
 
         [JsonProperty("doc_no_prefix", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string DocNoPrefix { get; set; }
