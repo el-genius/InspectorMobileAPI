@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="4.1.3.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DbManipulation\Command\" />
+    <Folder Include="DbManipulation\Query\" />
+    <Folder Include="Models\Composite\" />
+    <Folder Include="Models\MobileModel\Enums\" />
+    <Folder Include="Logic\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Models\Main\HeaderOptions.cs">
+      <DependentUpon>Header.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\ItemOptions.cs">
+      <DependentUpon>Item.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Authorship.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Author.cs">
+      <DependentUpon>Authorship.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Metrics.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Metadata.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Media.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Versioning.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\OriginInformation.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\ResponseSet.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\Response.cs">
+      <DependentUpon>ResponseSet.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main\CreationSystemClass.cs">
+      <DependentUpon>Versioning.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\HeaderOptions.cs">
+      <DependentUpon>Header.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\ItemOptions.cs">
+      <DependentUpon>Item.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Authorship.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Author.cs">
+      <DependentUpon>Authorship.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Media.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Metadata.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Metrics.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\OriginInformation.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\ResponseSet.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Response.cs">
+      <DependentUpon>ResponseSet.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\Versioning.cs">
+      <DependentUpon>TemplateData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MobileModel\CreationSystemClass.cs">
+      <DependentUpon>Versioning.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>
